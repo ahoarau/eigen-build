@@ -26,7 +26,7 @@ jobs:
     - uses: seanmiddleditch/gha-setup-ninja@master
     - name: Clone the repo
       run: |
-        git clone https://gitlab.com/libeigen/eigen.git
+        git clone https://gitlab.com/libeigen/eigen.git ${{env.pkg_name}}-${{matrix.qt_version}}-src
         git -C eigen checkout ${{env.git_ref}}
         
     - name: configure
