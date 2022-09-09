@@ -3,7 +3,7 @@ name: Windows64 and linux64 Build
 on: [push]
 env:
   pkg_name: eigen
-  git_ref: fb212c745d1217357c7eaafd81b7d2dd4e1ef8d4
+  git_ref: fb212c74
   pkg_version: 3.4.90
 
 jobs:
@@ -40,10 +40,10 @@ jobs:
       run: cmake --install build --prefix="$(pwd)/install"
       
     - name: Make the output package
-      run: mv install ${{env.pkg_name}}-${{env.pkg_versions}}-${{env.git_ref}}-interface-release-${{matrix.os_short}}
+      run: mv install ${{env.pkg_name}}-${{env.pkg_version}}-${{env.git_ref}}-interface-release-${{matrix.os_short}}
 
     - uses: actions/upload-artifact@v3
       with:
-        name: ${{env.pkg_name}}-${{env.pkg_versions}}-${{env.git_ref}}-interface-release-${{matrix.os_short}}
-        path: ${{env.pkg_name}}-${{env.pkg_versions}}-${{env.git_ref}}-interface-release-${{matrix.os_short}}
+        name: ${{env.pkg_name}}-${{env.pkg_version}}-${{env.git_ref}}-interface-release-${{matrix.os_short}}
+        path: ${{env.pkg_name}}-${{env.pkg_version}}-${{env.git_ref}}-interface-release-${{matrix.os_short}}
       
