@@ -1,6 +1,10 @@
 name: Windows64 and linux64 Build
 
 on: [push]
+env:
+  pkg_name: eigen
+  git_ref: fb212c745d1217357c7eaafd81b7d2dd4e1ef8d4
+  pkg_version: [3.4.90]
 
 jobs:
   build:
@@ -9,7 +13,6 @@ jobs:
       matrix:
         os: [windows-2022, ubuntu-22.04]
         build_type: ['Release']
-        pkg_name: ['eigen']
         link_type: ['interface']
         qt_version: [6.3.1]
         include:
@@ -24,15 +27,14 @@ jobs:
     - name: Clone the repo
       run: |
         git clone https://gitlab.com/libeigen/eigen.git
-        git -C eigen checkout fb212c745d1217357c7eaafd81b7d2dd4e1ef8d4
+        git -C eigen checkout ${{env.git_ref}}
         
     - name: configure
-      run: cmake -S qt-${{matrix.qt_version}}-src -B qt-${{matrix.qt_version}}-shared-${{matrix.build_type}}-${{matrix.os_short}}-build -DCMAKE_BUILD_TYPE=${{matrix.build_type}} -G Ninja -DEIGEN_BUILD_PKGCONFIG=OFF -DEIGEN_BUILD_DOC=OFF -DBUILD_TESTING=OFF -DEIGEN_BUILD_BLAS=OFF -DEIGEN_BUILD_LAPACK=OFF
+      run: cmake -S ${{env.pkg_name}}-${{matrix.qt_version}}-src -B ${{env.pkg_name}}-${{matrix.qt_version}}-${{matrix.link_type}}-${{matrix.build_type}}-${{matrix.os_short}}-build -DCMAKE_BUILD_TYPE=${{matrix.build_type}} -G Ninja -DEIGEN_BUILD_PKGCONFIG=OFF -DEIGEN_BUILD_DOC=OFF -DBUILD_TESTING=OFF -DEIGEN_BUILD_BLAS=OFF -DEIGEN_BUILD_LAPACK=OFF
 
     - name: Build
-      run: cmake --build qt-${{matrix.qt_version}}-shared-${{matrix.build_type}}-${{matrix.os_short}}-build --config ${{matrix.build_type}}
+      run: cmake --build ${{env.pkg_name}}-${{matrix.qt_version}}-${{matrix.link_type}}-${{matrix.build_type}}-${{matrix.os_short}}-build --config ${{matrix.build_type}}
       
     - name: Install
-      run: cmake --install qt-${{matrix.qt_version}}-shared-${{matrix.build_type}}-${{matrix.os_short}}-build --prefix="$(pwd)/qt-${{matrix.qt_version}}-shared-${{matrix.build_type}}-${{matrix.os_short}}"
+      run: cmake --install ${{env.pkg_name}}-${{matrix.qt_version}}-${{matrix.link_type}}-${{matrix.build_type}}-${{matrix.os_short}}-build --prefix="$(pwd)/${{env.pkg_name}}-${{matrix.qt_version}}-${{matrix.link_type}}-${{matrix.build_type}}-${{matrix.os_short}}"
       
-eigen -B $build_dir -G Ninja -DCMAKE_BUILD_TYPE="$cmake_config" -DCMAKE_INSTALL_PREFIX="$location/$quintuplet" -DEIGEN_BUILD_PKGCONFIG=OFF -DEIGEN_BUILD_DOC=OFF -DBUILD_TESTING=OFF -DEIGEN_BUILD_BLAS=OFF -DEIGEN_BUILD_LAPACK=OFF
