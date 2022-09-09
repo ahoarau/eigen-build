@@ -24,17 +24,19 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - uses: seanmiddleditch/gha-setup-ninja@master
+    
     - name: Clone the repo
-      run: |
-        git clone https://gitlab.com/libeigen/eigen.git ${{env.pkg_name}}-${{matrix.qt_version}}-src
-        git -C ${{env.pkg_name}}-${{matrix.qt_version}}-src checkout ${{env.git_ref}}
-        
+      run: git clone https://gitlab.com/libeigen/eigen.git $pkg_name
+
+    - name: Checkout the correct versions
+      run: git -C $pkg_name checkout ${{env.git_ref}}
+
     - name: configure
-      run: cmake -S ${{env.pkg_name}}-${{matrix.qt_version}}-src -B ${{env.pkg_name}}-${{matrix.qt_version}}-${{matrix.link_type}}-${{matrix.build_type}}-${{matrix.os_short}}-build -DCMAKE_BUILD_TYPE=${{matrix.build_type}} -G Ninja -DEIGEN_BUILD_PKGCONFIG=OFF -DEIGEN_BUILD_DOC=OFF -DBUILD_TESTING=OFF -DEIGEN_BUILD_BLAS=OFF -DEIGEN_BUILD_LAPACK=OFF
+      run: cmake -S $pkg_name -B build -DCMAKE_BUILD_TYPE=${{matrix.build_type}} -G Ninja -DEIGEN_BUILD_PKGCONFIG=OFF -DEIGEN_BUILD_DOC=OFF -DBUILD_TESTING=OFF -DEIGEN_BUILD_BLAS=OFF -DEIGEN_BUILD_LAPACK=OFF
 
     - name: Build
-      run: cmake --build ${{env.pkg_name}}-${{matrix.qt_version}}-${{matrix.link_type}}-${{matrix.build_type}}-${{matrix.os_short}}-build --config ${{matrix.build_type}}
+      run: cmake --build build --config ${{matrix.build_type}}
       
     - name: Install
-      run: cmake --install ${{env.pkg_name}}-${{matrix.qt_version}}-${{matrix.link_type}}-${{matrix.build_type}}-${{matrix.os_short}}-build --prefix="$(pwd)/${{env.pkg_name}}-${{matrix.qt_version}}-${{matrix.link_type}}-${{matrix.build_type}}-${{matrix.os_short}}"
+      run: cmake --install build --prefix="$(pwd)/install"
       
