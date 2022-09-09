@@ -14,7 +14,6 @@ jobs:
         os: [windows-2022, ubuntu-22.04]
         build_type: ['Release']
         link_type: ['interface']
-        qt_version: [6.3.1]
         include:
           - os: windows-2022
             os_short: win64
@@ -39,4 +38,16 @@ jobs:
       
     - name: Install
       run: cmake --install build --prefix="$(pwd)/install"
+      
+    - name: Make the output package
+      run: mv install ${{env.pkg_name}}-${{env.pkg_versions}}-${{env.git_ref}}-interface-release-${{matrix.os_short}}
+
+    - uses: edgarrc/action-7z@v1
+      with:
+        args: 7z a ${{env.pkg_name}}-${{env.pkg_versions}}-${{env.git_ref}}-interface-release-${{matrix.os_short}}.7z ${{env.pkg_name}}-${{env.pkg_versions}}-${{env.git_ref}}-interface-release-${{matrix.os_short}}
+
+    - uses: actions/upload-artifact@v3
+      with:
+        name: package
+        path: ${{env.pkg_name}}-${{env.pkg_versions}}-${{env.git_ref}}-interface-release-${{matrix.os_short}}.7z
       
