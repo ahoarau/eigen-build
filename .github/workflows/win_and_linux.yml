@@ -42,12 +42,8 @@ jobs:
     - name: Make the output package
       run: mv install ${{env.pkg_name}}-${{env.pkg_versions}}-${{env.git_ref}}-interface-release-${{matrix.os_short}}
 
-    - uses: edgarrc/action-7z@v1
-      with:
-        args: 7z a ${{env.pkg_name}}-${{env.pkg_versions}}-${{env.git_ref}}-interface-release-${{matrix.os_short}}.7z ${{env.pkg_name}}-${{env.pkg_versions}}-${{env.git_ref}}-interface-release-${{matrix.os_short}}
-
     - uses: actions/upload-artifact@v3
       with:
-        name: package
-        path: ${{env.pkg_name}}-${{env.pkg_versions}}-${{env.git_ref}}-interface-release-${{matrix.os_short}}.7z
+        name: ${{env.pkg_name}}-${{env.pkg_versions}}-${{env.git_ref}}-interface-release-${{matrix.os_short}}
+        path: ${{env.pkg_name}}-${{env.pkg_versions}}-${{env.git_ref}}-interface-release-${{matrix.os_short}}
       
