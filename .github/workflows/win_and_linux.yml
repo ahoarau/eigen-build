@@ -40,10 +40,12 @@ jobs:
       run: cmake --install build --prefix="$(pwd)/install"
       
     - name: Make the output package
-      run: mv install ${{env.pkg_name}}-${{env.pkg_version}}-${{env.git_ref}}-interface-release-${{matrix.os_short}}
+      run: |
+        mkdir package
+        mv install package/${{env.pkg_name}}-${{env.pkg_version}}-${{env.git_ref}}-interface-release-${{matrix.os_short}}
 
     - uses: actions/upload-artifact@v3
       with:
         name: ${{env.pkg_name}}-${{env.pkg_version}}-${{env.git_ref}}-interface-release-${{matrix.os_short}}
-        path: ${{env.pkg_name}}-${{env.pkg_version}}-${{env.git_ref}}-interface-release-${{matrix.os_short}}
+        path: package
       
