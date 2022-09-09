@@ -24,15 +24,15 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - uses: seanmiddleditch/gha-setup-ninja@master
-    
-    - name: Clone the repo
-      run: git clone https://gitlab.com/libeigen/eigen.git $pkg_name
 
-    - name: Checkout the correct versions
-      run: git -C $pkg_name checkout ${{env.git_ref}}
+    - name: Clone the repo
+      run: git clone https://gitlab.com/libeigen/eigen.git ${{env.pkg_name}}
+
+    - name: Checkout the correct commit
+      run: git -C ${{env.pkg_name}} checkout ${{env.git_ref}}
 
     - name: configure
-      run: cmake -S $pkg_name -B build -DCMAKE_BUILD_TYPE=${{matrix.build_type}} -G Ninja -DEIGEN_BUILD_PKGCONFIG=OFF -DEIGEN_BUILD_DOC=OFF -DBUILD_TESTING=OFF -DEIGEN_BUILD_BLAS=OFF -DEIGEN_BUILD_LAPACK=OFF
+      run: cmake -S ${{env.pkg_name}} -B build -DCMAKE_BUILD_TYPE=${{matrix.build_type}} -G Ninja -DEIGEN_BUILD_PKGCONFIG=OFF -DEIGEN_BUILD_DOC=OFF -DBUILD_TESTING=OFF -DEIGEN_BUILD_BLAS=OFF -DEIGEN_BUILD_LAPACK=OFF
 
     - name: Build
       run: cmake --build build --config ${{matrix.build_type}}
