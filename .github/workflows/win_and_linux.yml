@@ -27,7 +27,7 @@ jobs:
     - name: Clone the repo
       run: |
         git clone https://gitlab.com/libeigen/eigen.git ${{env.pkg_name}}-${{matrix.qt_version}}-src
-        git -C eigen checkout ${{env.git_ref}}
+        git -C ${{env.pkg_name}}-${{matrix.qt_version}}-src checkout ${{env.git_ref}}
         
     - name: configure
       run: cmake -S ${{env.pkg_name}}-${{matrix.qt_version}}-src -B ${{env.pkg_name}}-${{matrix.qt_version}}-${{matrix.link_type}}-${{matrix.build_type}}-${{matrix.os_short}}-build -DCMAKE_BUILD_TYPE=${{matrix.build_type}} -G Ninja -DEIGEN_BUILD_PKGCONFIG=OFF -DEIGEN_BUILD_DOC=OFF -DBUILD_TESTING=OFF -DEIGEN_BUILD_BLAS=OFF -DEIGEN_BUILD_LAPACK=OFF
